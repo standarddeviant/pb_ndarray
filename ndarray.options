@@ -1,0 +1,3 @@
+# test.options
+ndarray.shape               max_count:4
+ndarray.shape_description   max_size:64
