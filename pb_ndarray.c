@@ -33,13 +33,17 @@ uint32_t pb_ndarray_bytes_per_eltype(uint32_t eltype) {
     return 0;
 }
 
-uint32_t pb_ndarray_data_bytes_len(ndarray *a) {
+uint32_t pb_ndarray_numel(ndarray *a) {
     uint32_t ix;
-    uint32_t out=pb_ndarray_bytes_per_eltype(a->eltype);
+    uint32_t out=1;
     for(ix=0; ix<a->shape_count; ix++) {
         out *= a->shape[ix];
     }
     return out;
+}
+
+uint32_t pb_ndarray_data_bytes_len(ndarray *a) {
+    return pb_ndarray_numel(a) * pb_ndarray_bytes_per_eltype(a->eltype);
 }
 
 bool encode_buf_desc(pb_ostream_t *stream, const pb_field_t *field, void * const *arg) {

@@ -49,21 +49,28 @@ DTYPE_BYTE_ORDER = {
     ndarray_pb2.NA            : None  # special case
 }
 
-def pb_ndarray_decode(b):
-    msg_len, new_pos = _DecodeVarint32(b, 0)
+def pb_ndarray_to_np_ndarray(pba):
     try:
-        pba = ndarray_pb2.ndarray.FromString(b[ new_pos : new_pos + msg_len])
         byte_order = DTYPE_BYTE_ORDER.get(pba.byte_order, None)
         eltype =  DTYPE_ELTYPE.get(pba.eltype, None)
         if byte_order and eltype:
             dtype = byte_order + eltype
             a1 = np.frombuffer(pba.data, dtype=dtype)
             a2 = np.reshape(a1, list(pba.shape), order='F')
-            return a2, new_pos + msg_len
+            return a2
         else:
             # TODO - handle special case of dtype
             pass
     except Exception as exc:
+        print(f'whoa, {exc}')
+    return None
+
+
+def pb_ndarray_decode(b):
+    msg_len, new_pos = _DecodeVarint32(b, 0)
+    try:
+        pba = ndarray_pb2.ndarray.FromString(b[ new_pos : new_pos + msg_len])
+        return pb_ndarray_to_np_ndarray(pba), new_pos + msg_len
+    except Exception as exc:
         print(exc)
     return None, None
-

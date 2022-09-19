@@ -27,7 +27,6 @@ int main(void) {
     a.crc = 42;
     /* set callback to copy bytes via buf_desc_t, i.e. ptr and len*/
     a.data = BUF_DESC_ENCODE_CB(
-        encode_buf_desc, 
         BUF_DESC(
             g_scratch_buf,
             pb_ndarray_data_bytes_len(&a)
