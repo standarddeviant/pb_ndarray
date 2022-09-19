@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "ndarray.proto";
+
+/* array 'tag' to be used in custom msg, i.e. cmsg as an example */
+enum cmsg_tag {
+    TAGA = 0;
+    TAGB = 1;
+    TAGC = 2;
+    TAGD = 3;
+    TAGE = 4;
+    TAGF = 5;
+}
+
+message cmsg {
+    cmsg_tag tag = 1;
+    ndarray a = 2;
+}
